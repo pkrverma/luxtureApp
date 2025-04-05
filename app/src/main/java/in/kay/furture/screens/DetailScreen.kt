@@ -149,6 +149,7 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
 
             Button(
                 onClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set("checkoutItem", furnitureModel)
                     navController.navigate("checkout")
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = colorPurple),
@@ -158,9 +159,10 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
                     text = "Buy now",
                     style = Typography.body1,
                     fontSize = 18.sp,
-                    color = Color(0XFFFFFFFF).copy(alpha = 1f)
+                    color = Color.White
                 )
             }
+
         }
     }
 }

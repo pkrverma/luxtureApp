@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.kay.furture.models.FurnitureModel
 import `in`.kay.furture.screens.CheckoutScreen
 
 @AndroidEntryPoint
@@ -39,13 +40,17 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(navController, viewModel)
                         }
                         composable("detail") {
-                            DetailScreen(navController = navController, viewModel = viewModel)
+                            DetailScreen(viewModel, navController)
                         }
                         composable("splash") {
                             SplashScreen(navController = navController)
                         }
                         composable("checkout") {
-                            CheckoutScreen(navController = navController)
+                            val furnitureModel =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<FurnitureModel>("checkoutItem")
+                            if (furnitureModel != null) {
+                                CheckoutScreen(navController = navController, item = furnitureModel)
+                            }
                         }
                     }
                 }
