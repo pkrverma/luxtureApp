@@ -32,32 +32,29 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.layoutId
 import androidx.navigation.NavHostController
 import androidx.palette.graphics.Palette
-import okhttp3.internal.toHexString
 
 @Composable
 fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
-    val furnitureModel = viewModel.data
+    val furnitureModel = viewModel.data ?: return // Avoid null crash
     val context = LocalContext.current
-    var btnColor by remember {
-        mutableStateOf(colorPurple)
-    }
+    var btnColor by remember { mutableStateOf(colorPurple) }
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(color = Color(0XFFF3F6F8)),
+            .background(color = Color(0xFFF3F6F8)),
         constraintSet = constraintsDetail()
     ) {
         Text(
-            text = furnitureModel.type.toString(),
+            text = furnitureModel.type.orEmpty(),
             style = Typography.body1,
             fontSize = 18.sp,
-            color = Color(0XFF171717).copy(alpha = 0.4f),
+            color = Color(0xFF171717).copy(alpha = 0.4f),
             modifier = Modifier.layoutId("tvType")
         )
         Text(
-            text = furnitureModel.name.toString(),
+            text = furnitureModel.name.orEmpty(),
             style = Typography.h1,
             fontSize = 32.sp,
             color = colorBlack,
@@ -67,11 +64,11 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
             text = "from",
             style = Typography.body1,
             fontSize = 18.sp,
-            color = Color(0XFF171717).copy(alpha = 0.4f),
+            color = Color(0xFF171717).copy(alpha = 0.4f),
             modifier = Modifier.layoutId("tvFrom")
         )
         Text(
-            text = "$ ${furnitureModel.price.toString()}",
+            text = "$ ${furnitureModel.price}",
             style = Typography.h1,
             fontSize = 24.sp,
             color = colorBlack,
@@ -79,7 +76,7 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
         )
         Image(
             painter = painterResource(id = furnitureModel.drawable),
-            contentDescription = "",
+            contentDescription = "Furniture Image",
             modifier = Modifier
                 .height(240.dp)
                 .zIndex(1.1f)
@@ -93,47 +90,48 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
                 .padding(24.dp, 160.dp, 24.dp, 24.dp)
         ) {
             Text(
-                text = furnitureModel.name.toString(),
+                text = furnitureModel.name.orEmpty(),
                 style = Typography.h1,
                 fontSize = 18.sp,
-                color = Color(0XFF171717).copy(alpha = 1f)
+                color = Color(0xFF171717)
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = furnitureModel.description.toString(),
+                text = furnitureModel.description.orEmpty(),
                 style = Typography.body2,
                 fontSize = 16.sp,
-                color = Color(0XFF171717).copy(alpha = 0.2f),
+                color = Color(0xFF171717).copy(alpha = 0.6f)
             )
             Spacer(modifier = Modifier.height(64.dp))
 
-            val bitmap = BitmapFactory.decodeResource(context.resources, furnitureModel.drawable)
-            Palette.from(bitmap).generate { palette ->
-                kotlin.runCatching {
-                    val hexColor = palette?.vibrantSwatch?.rgb?.toHexString()
-                    hexColor?.let {
-                        btnColor = getColor(hexColor)
-                    }
-                }.getOrElse {
-                    val hexColor = palette?.darkMutedSwatch?.rgb?.toHexString()
-                    hexColor?.let {
-                        btnColor = getColor(hexColor)
+            val bitmap = runCatching {
+                BitmapFactory.decodeResource(context.resources, furnitureModel.drawable)
+            }.getOrNull()
+
+            bitmap?.let {
+                Palette.from(it).generate { palette ->
+                    val vibrantColor = palette?.vibrantSwatch?.rgb
+                        ?: palette?.darkMutedSwatch?.rgb
+                    vibrantColor?.let { rgb ->
+                        btnColor = Color(rgb)
                     }
                 }
             }
 
             Button(
                 onClick = {
-                    val sceneViewerIntent = Intent(Intent.ACTION_VIEW)
-                    val intentUri =
-                        Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
-                            .appendQueryParameter("file", furnitureModel.link)
-                            .appendQueryParameter("mode", "ar_only")
-                            .appendQueryParameter("title", furnitureModel.name)
-                            .build()
-                    sceneViewerIntent.data = intentUri
-                    sceneViewerIntent.setPackage("com.google.ar.core")
-                    sceneViewerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    val intentUri = Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
+                        .appendQueryParameter("file", furnitureModel.link)
+                        .appendQueryParameter("mode", "ar_only")
+                        .appendQueryParameter("title", furnitureModel.name)
+                        .build()
+
+                    val sceneViewerIntent = Intent(Intent.ACTION_VIEW).apply {
+                        data = intentUri
+                        setPackage("com.google.android.googlequicksearchbox")
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+
                     context.startActivity(sceneViewerIntent)
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = btnColor),
@@ -143,12 +141,13 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
                     text = "View in Your Space",
                     style = Typography.body1,
                     fontSize = 18.sp,
-                    color = Color(0XFFFFFFFF).copy(alpha = 1f)
+                    color = Color.White
                 )
             }
 
             Button(
                 onClick = {
+                    viewModel.setSelectedItem(furnitureModel) // ✅ Updated here
                     navController.currentBackStackEntry?.savedStateHandle?.set("checkoutItem", furnitureModel)
                     navController.navigate("checkout")
                 },
@@ -162,7 +161,6 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
                     color = Color.White
                 )
             }
-
         }
     }
 }
@@ -208,8 +206,4 @@ fun constraintsDetail(): ConstraintSet {
             height = Dimension.fillToConstraints
         }
     }
-}
-
-fun getColor(colorString: String): Color {
-    return Color(android.graphics.Color.parseColor("#$colorString"))
 }

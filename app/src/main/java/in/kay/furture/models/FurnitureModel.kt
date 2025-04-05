@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FurnitureModel(
-    var name: String? = null,
+    val name: String = "",
     val drawable: Int = 0,
-    val link: String? = null,
-    val price : Int? = 0,
-    val description : String ? = "",
-    val type:String? = ""
+    val link: String = "",
+    val price: Int = 0,
+    val description: String = "",
+    val type: String = ""
 ) : Parcelable

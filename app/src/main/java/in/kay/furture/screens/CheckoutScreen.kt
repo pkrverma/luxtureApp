@@ -1,37 +1,55 @@
 package `in`.kay.furture.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.material.Text
-import androidx.navigation.NavHostController
-import `in`.kay.furture.ui.theme.Typography
-import `in`.kay.furture.ui.theme.colorBlack
-import `in`.kay.furture.ui.theme.colorPurple
-import `in`.kay.furture.ui.theme.colorWhite
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import `in`.kay.furture.models.FurnitureModel
+import `in`.kay.furture.SharedViewModel
+import `in`.kay.furture.ui.theme.Typography
+import `in`.kay.furture.ui.theme.colorBlack
+import `in`.kay.furture.ui.theme.colorPurple
+import `in`.kay.furture.ui.theme.colorWhite
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
+fun CheckoutScreen(
+    navController: NavController,
+    viewModel: SharedViewModel
+) {
+    val context = LocalContext.current
+    val addressState by viewModel.address.collectAsState()
+    val item = viewModel.data
+
+    if (item == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No item selected for checkout.", style = Typography.h1)
+        }
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Checkout", color = Color.White) },
-                backgroundColor = colorPurple,
-                contentColor = colorWhite
+                title = { Text("Checkout", color = colorWhite) },
+                backgroundColor = colorPurple
             )
         },
         content = {
@@ -41,7 +59,8 @@ fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
                     .background(Color(0xFFF3F6F8))
                     .padding(16.dp)
             ) {
-                // Image and item summary
+
+                // Image and item details
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -51,24 +70,35 @@ fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
                 ) {
                     Image(
                         painter = painterResource(id = item.drawable),
-                        contentDescription = null,
+                        contentDescription = item.name,
                         modifier = Modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(12.dp))
                     )
+
                     Spacer(modifier = Modifier.width(16.dp))
+
                     Column {
-                        item.name?.let { it1 -> Text(it1, style = Typography.h1, fontSize = 20.sp) }
-                        item.type?.let { it1 -> Text(it1, style = Typography.body2, color = Color.Gray) }
-                        Text("₹${item.price}", style = Typography.h1, fontSize = 20.sp, color = colorPurple)
+                        Text(item.name ?: "Unknown Product", style = Typography.h1, fontSize = 20.sp)
+                        Text(item.type ?: "Unknown Type", style = Typography.body2, color = Color.Gray)
+                        Text(
+                            "₹${item.price ?: 0}",
+                            style = Typography.h1,
+                            fontSize = 20.sp,
+                            color = colorPurple
+                        )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Order summary
+                // Order Summary
                 Text("Order Summary", style = Typography.h1, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
+
+                val subtotal = item.price ?: 0
+                val shipping = 50
+                val total = subtotal + shipping
 
                 Column(
                     modifier = Modifier
@@ -77,38 +107,62 @@ fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
                         .background(colorWhite)
                         .padding(16.dp)
                 ) {
-                    SummaryRow("Subtotal", "₹${item.price}")
-                    SummaryRow("Shipping", "₹50.0")
+                    SummaryRow("Subtotal", "₹$subtotal")
+                    SummaryRow("Shipping", "₹$shipping")
                     Divider(modifier = Modifier.padding(vertical = 8.dp))
-                    SummaryRow("Total", "₹${item.price?.plus(50)}")
+                    SummaryRow("Total", "₹$total")
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // NEW: Navigate to Address Page
+                // Address section
+                addressState?.let { address ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(colorWhite)
+                            .padding(16.dp)
+                    ) {
+                        Text("Deliver To:", style = Typography.h1, fontSize = 16.sp, color = colorPurple)
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text("${address.fullName}, ${address.phone}")
+                        Text("${address.address}, ${address.city}, ${address.state} - ${address.zip}")
+                        if (address.landmark.isNotBlank()) {
+                            Text("Landmark: ${address.landmark}")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                // Add / Edit Address Button
                 Button(
                     onClick = { navController.navigate("address") },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .align(Alignment.CenterHorizontally)
                 ) {
                     Text("Add / Edit Delivery Address", fontSize = 16.sp, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Confirm and Pay
+                // Confirm and Pay Button
                 Button(
                     onClick = {
-                        // Trigger order or payment flow
+                        if (addressState == null) {
+                            Toast.makeText(context, "Please add your delivery address first.", Toast.LENGTH_SHORT).show()
+                            navController.navigate("address")
+                        } else {
+                            navController.navigate("payment") // TODO: Replace with your payment route if different
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = colorPurple),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
-                        .align(Alignment.CenterHorizontally)
                 ) {
                     Text("Confirm and Pay", fontSize = 18.sp, color = Color.White)
                 }

@@ -1,11 +1,7 @@
 package `in`.kay.furture
 
 import `in`.kay.furture.models.FurnitureModel
-import `in`.kay.furture.screens.AddressScreen
-import `in`.kay.furture.screens.CheckoutScreen
-import `in`.kay.furture.screens.DetailScreen
-import `in`.kay.furture.screens.HomeScreen
-import `in`.kay.furture.screens.SplashScreen
+import `in`.kay.furture.screens.*
 import `in`.kay.furture.ui.theme.FurtureTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,14 +9,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,14 +46,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("checkout") {
-                            val furnitureModel =
-                                navController.previousBackStackEntry
-                                    ?.savedStateHandle
-                                    ?.get<FurnitureModel>("checkoutItem")
+                            CheckoutScreen(navController = navController, viewModel = viewModel)
 
-                            if (furnitureModel != null) {
-                                CheckoutScreen(navController = navController, item = furnitureModel)
-                            }
                         }
 
                         composable("address") {
@@ -68,18 +57,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FurtureTheme {
-        Greeting("Android")
     }
 }

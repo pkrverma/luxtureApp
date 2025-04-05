@@ -35,9 +35,8 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: SharedViewModel) {
-    BackHandler() {
+    BackHandler() {}
 
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +49,7 @@ fun HomeScreen(navController: NavHostController, viewModel: SharedViewModel) {
         ) {
             Icon(
                 imageVector = Icons.Outlined.ShoppingCart,
-                contentDescription = "null",
+                contentDescription = "Cart",
                 tint = colorPurple,
                 modifier = Modifier.size(32.dp)
             )
@@ -65,135 +64,70 @@ fun HomeScreen(navController: NavHostController, viewModel: SharedViewModel) {
                 style = `in`.kay.furture.ui.theme.Typography.h1,
             )
         }
+
         Text(
             text = "Browse by categories",
             style = `in`.kay.furture.ui.theme.Typography.h1,
             fontSize = 18.sp,
             modifier = Modifier.padding(top = 32.dp, start = 24.dp)
         )
+
         Spacer(modifier = Modifier.height(64.dp))
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         ) {
             itemsIndexed(getCategories()) { idx, category ->
-                CategoryCard(index = idx, category = category)
-            }
-        }
-        Text(
-            text = "Recommended for you",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp, end = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        ) {
-            itemsIndexed(getRecommended()) { idx, category ->
-                Cards(index = idx, category = category, navController, viewModel)
-            }
-        }
-        Text(
-            text = "Chairs",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        ) {
-            itemsIndexed(getChairs()) { idx, category ->
-                Cards(
+                CategoryCard(
                     index = idx,
                     category = category,
-                    navController = navController,
-                    viewModel = viewModel
+                    onClick = {
+                        // Navigate based on category name
+                        when (category.name?.lowercase()) {
+                            "beds" -> navController.navigate("bedsCategory")
+                            "chairs" -> navController.navigate("chairsCategory")
+                            "sofas" -> navController.navigate("sofasCategory")
+                            "home decor" -> navController.navigate("homeDecorCategory")
+                            "office" -> navController.navigate("officeCategory")
+                            "tables" -> navController.navigate("tablesCategory")
+                            else -> {} // Handle unknown categories if needed
+                        }
+                    }
                 )
             }
         }
-        Text(
-            text = "Sofas",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        ) {
-            itemsIndexed(getSofas()) { idx, category ->
-                Cards(
-                    index = idx,
-                    category = category,
-                    navController = navController,
-                    viewModel = viewModel
-                )
-            }
-        }
-        Text(
-            text = "Home Decors",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        ) {
-            itemsIndexed(getHomeDecors()) { idx, category ->
-                Cards(
-                    index = idx,
-                    category = category,
-                    navController = navController,
-                    viewModel = viewModel
-                )
-            }
-        }
-        Text(
-            text = "Office Furniture",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        ) {
-            itemsIndexed(getOffices()) { idx, category ->
-                Cards(
-                    index = idx,
-                    category = category,
-                    navController = navController,
-                    viewModel = viewModel
-                )
-            }
-        }
-        Text(
-            text = "Tables",
-            style = `in`.kay.furture.ui.theme.Typography.h1,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(top = 32.dp, start = 24.dp)
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
-        ) {
-            itemsIndexed(getTables()) { idx, category ->
-                Cards(
-                    index = idx,
-                    category = category,
-                    navController = navController,
-                    viewModel = viewModel
-                )
-            }
+
+        CategorySection("Recommended for you", getRecommended(), navController, viewModel)
+        CategorySection("Chairs", getChairs(), navController, viewModel)
+        CategorySection("Sofas", getSofas(), navController, viewModel)
+        CategorySection("Home Decors", getHomeDecors(), navController, viewModel)
+        CategorySection("Office Furniture", getOffices(), navController, viewModel)
+        CategorySection("Tables", getTables(), navController, viewModel, bottomPadding = 16.dp)
+    }
+}
+
+@Composable
+fun CategorySection(
+    title: String,
+    items: List<FurnitureModel>,
+    navController: NavHostController,
+    viewModel: SharedViewModel,
+    bottomPadding: Dp = 0.dp
+) {
+    Text(
+        text = title,
+        style = `in`.kay.furture.ui.theme.Typography.h1,
+        fontSize = 18.sp,
+        modifier = Modifier.padding(top = 32.dp, start = 24.dp)
+    )
+    Spacer(modifier = Modifier.height(24.dp))
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = bottomPadding)
+    ) {
+        itemsIndexed(items) { idx, category ->
+            Cards(index = idx, category = category, navController, viewModel)
         }
     }
 }
@@ -210,7 +144,7 @@ fun Cards(
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFF3F6F8))
             .clickable {
-                viewModel.data = category
+                viewModel.setSelectedItem(category)
                 navController.navigate("detail")
             },
         horizontalAlignment = Alignment.CenterHorizontally
@@ -243,11 +177,12 @@ fun Cards(
 }
 
 @Composable
-fun CategoryCard(category: FurnitureModel, index: Int) {
+fun CategoryCard(category: FurnitureModel, index: Int, onClick: () -> Unit) {
     ConstraintLayout(
         modifier = Modifier
             .height(200.dp)
-            .width(205.dp),
+            .width(205.dp)
+            .clickable { onClick() },
         constraintSet = constraints()
     ) {
         Image(
@@ -258,9 +193,9 @@ fun CategoryCard(category: FurnitureModel, index: Int) {
                 .layoutId("ic_back")
         )
         var padding: Dp = 32.dp
-        if (category.name.equals("home decor")) {
+        if (category.name.equals("home decor", ignoreCase = true)) {
             padding = 40.dp
-        } else if (category.name.equals("office")) {
+        } else if (category.name.equals("office", ignoreCase = true)) {
             padding = 48.dp
         }
         Image(
