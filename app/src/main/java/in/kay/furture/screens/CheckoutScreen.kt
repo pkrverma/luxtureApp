@@ -29,7 +29,7 @@ fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Checkout") },
+                title = { Text("Checkout", color = Color.White) },
                 backgroundColor = colorPurple,
                 contentColor = colorWhite
             )
@@ -83,8 +83,23 @@ fun CheckoutScreen(navController: NavController, item: FurnitureModel) {
                     SummaryRow("Total", "₹${item.price?.plus(50)}")
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
+                // NEW: Navigate to Address Page
+                Button(
+                    onClick = { navController.navigate("address") },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Add / Edit Delivery Address", fontSize = 16.sp, color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Confirm and Pay
                 Button(
                     onClick = {
                         // Trigger order or payment flow

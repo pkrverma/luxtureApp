@@ -1,5 +1,8 @@
 package `in`.kay.furture
 
+import `in`.kay.furture.models.FurnitureModel
+import `in`.kay.furture.screens.AddressScreen
+import `in`.kay.furture.screens.CheckoutScreen
 import `in`.kay.furture.screens.DetailScreen
 import `in`.kay.furture.screens.HomeScreen
 import `in`.kay.furture.screens.SplashScreen
@@ -15,13 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.kay.furture.models.FurnitureModel
-import `in`.kay.furture.screens.CheckoutScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -35,22 +35,34 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val viewModel = hiltViewModel<SharedViewModel>()
+
                     NavHost(navController = navController, startDestination = "splash") {
+
+                        composable("splash") {
+                            SplashScreen(navController)
+                        }
+
                         composable("home") {
                             HomeScreen(navController, viewModel)
                         }
+
                         composable("detail") {
                             DetailScreen(viewModel, navController)
                         }
-                        composable("splash") {
-                            SplashScreen(navController = navController)
-                        }
+
                         composable("checkout") {
                             val furnitureModel =
-                                navController.previousBackStackEntry?.savedStateHandle?.get<FurnitureModel>("checkoutItem")
+                                navController.previousBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.get<FurnitureModel>("checkoutItem")
+
                             if (furnitureModel != null) {
                                 CheckoutScreen(navController = navController, item = furnitureModel)
                             }
+                        }
+
+                        composable("address") {
+                            AddressScreen(navController = navController, viewModel = viewModel)
                         }
                     }
                 }
