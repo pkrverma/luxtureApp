@@ -30,16 +30,18 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.layoutId
+import androidx.navigation.NavHostController
 import androidx.palette.graphics.Palette
 import okhttp3.internal.toHexString
 
 @Composable
-fun DetailScreen(viewModel: SharedViewModel) {
+fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
     val furnitureModel = viewModel.data
     val context = LocalContext.current
     var btnColor by remember {
         mutableStateOf(colorPurple)
     }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -86,9 +88,7 @@ fun DetailScreen(viewModel: SharedViewModel) {
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                .background(
-                    colorWhite
-                )
+                .background(colorWhite)
                 .layoutId("clDetail")
                 .padding(24.dp, 160.dp, 24.dp, 24.dp)
         ) {
@@ -106,6 +106,7 @@ fun DetailScreen(viewModel: SharedViewModel) {
                 color = Color(0XFF171717).copy(alpha = 0.2f),
             )
             Spacer(modifier = Modifier.height(64.dp))
+
             val bitmap = BitmapFactory.decodeResource(context.resources, furnitureModel.drawable)
             Palette.from(bitmap).generate { palette ->
                 kotlin.runCatching {
@@ -119,14 +120,14 @@ fun DetailScreen(viewModel: SharedViewModel) {
                         btnColor = getColor(hexColor)
                     }
                 }
-
             }
+
             Button(
                 onClick = {
                     val sceneViewerIntent = Intent(Intent.ACTION_VIEW)
                     val intentUri =
                         Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
-                            .appendQueryParameter("file", "" + furnitureModel.link)
+                            .appendQueryParameter("file", furnitureModel.link)
                             .appendQueryParameter("mode", "ar_only")
                             .appendQueryParameter("title", furnitureModel.name)
                             .build()
@@ -145,9 +146,10 @@ fun DetailScreen(viewModel: SharedViewModel) {
                     color = Color(0XFFFFFFFF).copy(alpha = 1f)
                 )
             }
+
             Button(
                 onClick = {
-
+                    navController.navigate("checkout")
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = colorPurple),
                 modifier = Modifier.fillMaxWidth()
@@ -157,7 +159,7 @@ fun DetailScreen(viewModel: SharedViewModel) {
                     style = Typography.body1,
                     fontSize = 18.sp,
                     color = Color(0XFFFFFFFF).copy(alpha = 1f)
-                    )
+                )
             }
         }
     }
@@ -203,11 +205,9 @@ fun constraintsDetail(): ConstraintSet {
             width = Dimension.fillToConstraints
             height = Dimension.fillToConstraints
         }
-
-
     }
 }
 
 fun getColor(colorString: String): Color {
-    return Color(android.graphics.Color.parseColor("#" + colorString))
+    return Color(android.graphics.Color.parseColor("#$colorString"))
 }

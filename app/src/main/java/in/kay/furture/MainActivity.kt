@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FurtureTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -35,14 +35,18 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val viewModel = hiltViewModel<SharedViewModel>()
                     NavHost(navController = navController, startDestination = "splash") {
-                        composable("home") { HomeScreen(navController, viewModel) }
+                        composable("home") {
+                            HomeScreen(navController, viewModel)
+                        }
                         composable("detail") {
-                            DetailScreen(viewModel)
+                            DetailScreen(navController = navController, viewModel = viewModel)
                         }
                         composable("splash") {
                             SplashScreen(navController = navController)
                         }
-                        composable("checkout") { CheckoutScreen(navController) }
+                        composable("checkout") {
+                            CheckoutScreen(navController = navController)
+                        }
                     }
                 }
             }
