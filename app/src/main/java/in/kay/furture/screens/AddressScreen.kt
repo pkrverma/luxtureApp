@@ -22,6 +22,7 @@ import `in`.kay.furture.ui.theme.colorWhite
 data class AddressData(
     val fullName: String,
     val phone: String,
+    val email: String,
     val address: String,
     val city: String,
     val zip: String,
@@ -35,16 +36,18 @@ data class AddressData(
 @Composable
 fun AddressScreen(navController: NavController, viewModel: SharedViewModel) {
     val context = LocalContext.current
+    val existingAddress by viewModel.address.collectAsState()
 
-    var fullName by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var zip by remember { mutableStateOf("") }
-    var landmark by remember { mutableStateOf("") }
-    var state by remember { mutableStateOf("") }
-    var alternatePhone by remember { mutableStateOf("") }
-    var instructions by remember { mutableStateOf("") }
+    var fullName by remember { mutableStateOf(existingAddress?.fullName ?: "") }
+    var phone by remember { mutableStateOf(existingAddress?.phone ?: "") }
+    var email by remember { mutableStateOf(existingAddress?.email ?: "") }
+    var address by remember { mutableStateOf(existingAddress?.address ?: "") }
+    var city by remember { mutableStateOf(existingAddress?.city ?: "") }
+    var zip by remember { mutableStateOf(existingAddress?.zip ?: "") }
+    var landmark by remember { mutableStateOf(existingAddress?.landmark ?: "") }
+    var state by remember { mutableStateOf(existingAddress?.state ?: "") }
+    var alternatePhone by remember { mutableStateOf(existingAddress?.alternatePhone ?: "") }
+    var instructions by remember { mutableStateOf(existingAddress?.instructions ?: "") }
 
     Scaffold(
         topBar = {
@@ -80,6 +83,16 @@ fun AddressScreen(navController: NavController, viewModel: SharedViewModel) {
                         label = { Text("Primary Mobile Number") },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text("Email Address") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -157,12 +170,13 @@ fun AddressScreen(navController: NavController, viewModel: SharedViewModel) {
 
             Button(
                 onClick = {
-                    if (fullName.isNotBlank() && phone.isNotBlank() &&
+                    if (fullName.isNotBlank() && phone.isNotBlank() && email.isNotBlank() &&
                         address.isNotBlank() && city.isNotBlank() && zip.isNotBlank()
                     ) {
-                        val addressData = AddressData(
+                        val newAddress = AddressData(
                             fullName = fullName,
                             phone = phone,
+                            email = email,
                             address = address,
                             city = city,
                             zip = zip,
@@ -171,7 +185,7 @@ fun AddressScreen(navController: NavController, viewModel: SharedViewModel) {
                             alternatePhone = alternatePhone,
                             instructions = instructions
                         )
-                        viewModel.setAddress(addressData)
+                        viewModel.setAddress(newAddress)
                         Toast.makeText(context, "Address saved!", Toast.LENGTH_SHORT).show()
                         navController.popBackStack()
                     } else {

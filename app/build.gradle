@@ -7,40 +7,51 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    namespace 'in.kay.furture'
+    compileSdk = 34
 
     defaultConfig {
         applicationId "in.kay.furture"
-        minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        minSdk = 21
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles(
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            )
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
+
     buildFeatures {
-        compose true
+        compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion compiler_version
+        kotlinCompilerExtensionVersion = rootProject.ext.compiler_version
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -48,42 +59,65 @@ android {
     }
 }
 
-dependencies {
+kotlin {
+    jvmToolchain(17)
+}
 
+dependencies {
+    // Core
     implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0"
+
+    // Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:$constraint_layout"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation "androidx.activity:activity-compose:1.5.1"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$dagger_version"
+    kapt "com.google.dagger:hilt-compiler:$dagger_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+
+    // Retrofit + OkHttp
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
+    // Desugaring for Java 11+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
+    // Navigation Compose
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    // Telegram Bot SDK (Optional)
+    implementation 'io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7'
+
+    // Razorpay
+    implementation 'com.razorpay:checkout:1.6.40'
+
+    // Replace deprecated palette library
+    implementation "androidx.palette:palette-ktx:1.0.0"
+
+    // Coil again (already included)
+    implementation "io.coil-kt:coil-compose:2.4.0"
+
+    // Tests
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    // Coil
-    implementation("io.coil-kt:coil-compose:$coil_version")
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
-    // dagger -hilt
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    kapt "com.google.dagger:hilt-compiler:$dagger_version"
-    //Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
-    implementation("com.android.support:palette-v7:28.0.0")
-    // dagger -hilt
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    kapt "com.google.dagger:hilt-compiler:$dagger_version"
-    def nav_version = "2.5.1"
-
-    implementation "androidx.navigation:navigation-compose:$nav_version"
-    implementation 'io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7'
 }

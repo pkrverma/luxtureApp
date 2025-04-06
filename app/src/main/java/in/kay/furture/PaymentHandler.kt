@@ -1,52 +1,65 @@
+package `in`.kay.furture
+
 import android.app.Activity
-import android.widget.Toast
 import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
 import org.json.JSONObject
 
-class PaymentHandler(private val activity: Activity) : PaymentResultListener {
-
+class PaymentHandler(
+    private val activity: Activity,
+    private val onSuccess: (paymentId: String) -> Unit,
+    private val onFailure: (errorMessage: String) -> Unit
+) {
     fun startPayment(
-        modelName: String,
-        amount: Int, // In rupees
+        itemName: String,
+        amountInRupees: Int,
         userName: String,
         userEmail: String,
         userPhone: String
     ) {
         val checkout = Checkout()
-        checkout.setKeyID("YOUR_KEY_ID") // Replace with your Razorpay key
+        checkout.setKeyID("rzp_test_5QQF6Zeq0JBypN")
+        Checkout.preload(activity.applicationContext)
 
         try {
-            val options = JSONObject()
-            options.put("name", "Luxurious Creation")
-            options.put("description", modelName) // Show model name
-            options.put("currency", "INR")
-            options.put("amount", amount * 100) // Convert to paise
+            val options = JSONObject().apply {
+                put("name", "Luxurious Creation")
+                put("description", itemName)
+                put("currency", "INR")
+                put("amount", amountInRupees * 100)
 
-            // Optional branding image (should be HTTPS)
-            options.put("image", "https://luxurious-creation.web.app/logo.png")
+                put("image", "https://your-image-link.com/logo.png")
 
-            // Optional: Set user info in "prefill"
-            val prefill = JSONObject()
-            prefill.put("name", userName)
-            prefill.put("email", userEmail)
-            prefill.put("contact", userPhone)
-            options.put("prefill", prefill)
+                val prefill = JSONObject().apply {
+                    put("name", userName)
+                    put("email", userEmail)
+                    put("contact", userPhone)
+                }
 
+                put("prefill", prefill)
+            }
+
+            // Register this handler with MainActivity before starting payment
+            MainActivity.razorpayHandler = this
             checkout.open(activity, options)
-
         } catch (e: Exception) {
-            Toast.makeText(activity, "Payment Error: ${e.message}", Toast.LENGTH_LONG).show()
+            onFailure("Payment failed: ${e.localizedMessage}")
         }
     }
 
-    override fun onPaymentSuccess(razorpayPaymentID: String?) {
-        Toast.makeText(activity, "Payment Success: $razorpayPaymentID", Toast.LENGTH_LONG).show()
-        // TODO: Update Firestore / show confirmation UI
+    // Called from MainActivity on success
+    fun onSuccess(paymentId: String) {
+        onSuccess.invoke(paymentId)
+        clear()
     }
 
-    override fun onPaymentError(code: Int, response: String?) {
-        Toast.makeText(activity, "Payment Failed: $response", Toast.LENGTH_LONG).show()
-        // TODO: Show failure screen or retry option
+    // Called from MainActivity on failure
+    fun onFailure(errorMessage: String) {
+        onFailure.invoke(errorMessage)
+        clear()
+    }
+
+    // Clean up to prevent memory leaks
+    private fun clear() {
+        MainActivity.razorpayHandler = null
     }
 }

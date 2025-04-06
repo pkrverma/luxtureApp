@@ -1,6 +1,7 @@
 package `in`.kay.furture.screens
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,8 +31,9 @@ fun CheckoutScreen(
     viewModel: SharedViewModel
 ) {
     val context = LocalContext.current
+    val activity = context as Activity
     val addressState by viewModel.address.collectAsState()
-    val item = viewModel.data
+    val item by viewModel.selectedItem.collectAsState()
 
     if (item == null) {
         Box(
@@ -59,8 +61,7 @@ fun CheckoutScreen(
                     .background(Color(0xFFF3F6F8))
                     .padding(16.dp)
             ) {
-
-                // Image and item details
+                // Product Information
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -69,8 +70,8 @@ fun CheckoutScreen(
                         .padding(16.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = item.drawable),
-                        contentDescription = item.name,
+                        painter = painterResource(id = item!!.drawable),
+                        contentDescription = item!!.name,
                         modifier = Modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(12.dp))
@@ -79,24 +80,19 @@ fun CheckoutScreen(
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Column {
-                        Text(item.name ?: "Unknown Product", style = Typography.h1, fontSize = 20.sp)
-                        Text(item.type ?: "Unknown Type", style = Typography.body2, color = Color.Gray)
-                        Text(
-                            "₹${item.price ?: 0}",
-                            style = Typography.h1,
-                            fontSize = 20.sp,
-                            color = colorPurple
-                        )
+                        Text(item!!.name ?: "Unknown Product", style = Typography.h1, fontSize = 20.sp)
+                        Text(item!!.type ?: "Unknown Type", style = Typography.body2, color = Color.Gray)
+                        Text("₹${item!!.price ?: 0}", style = Typography.h1, fontSize = 20.sp, color = colorPurple)
                     }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Order Summary
+                // Order Summary Section
                 Text("Order Summary", style = Typography.h1, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
 
-                val subtotal = item.price ?: 0
+                val subtotal = item!!.price ?: 0
                 val shipping = 50
                 val total = subtotal + shipping
 
@@ -115,28 +111,33 @@ fun CheckoutScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Address section
-                addressState?.let { address ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(colorWhite)
-                            .padding(16.dp)
-                    ) {
-                        Text("Deliver To:", style = Typography.h1, fontSize = 16.sp, color = colorPurple)
-                        Spacer(modifier = Modifier.height(4.dp))
+                // Address Section
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(colorWhite)
+                        .padding(16.dp)
+                ) {
+                    Text("Deliver To:", style = Typography.h1, fontSize = 16.sp, color = colorPurple)
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    if (addressState != null) {
+                        val address = addressState!!
                         Text("${address.fullName}, ${address.phone}")
                         Text("${address.address}, ${address.city}, ${address.state} - ${address.zip}")
                         if (address.landmark.isNotBlank()) {
                             Text("Landmark: ${address.landmark}")
                         }
+                    } else {
+                        Text("Pulkit Verma, 6207212232")
+                        Text("UEM, Jaipur, Jaipur, Rajasthan - 303807")
+                        Text("Landmark: Udaipuriya Mod")
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                // Add / Edit Address Button
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = { navController.navigate("address") },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
@@ -149,14 +150,16 @@ fun CheckoutScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Confirm and Pay Button
                 Button(
                     onClick = {
-                        if (addressState == null) {
+                        if (addressState?.fullName.isNullOrBlank() ||
+                            addressState?.phone.isNullOrBlank() ||
+                            addressState?.address.isNullOrBlank()
+                        ) {
                             Toast.makeText(context, "Please add your delivery address first.", Toast.LENGTH_SHORT).show()
                             navController.navigate("address")
                         } else {
-                            navController.navigate("payment") // TODO: Replace with your payment route if different
+                            navController.navigate("paymentScreen")
                         }
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = colorPurple),

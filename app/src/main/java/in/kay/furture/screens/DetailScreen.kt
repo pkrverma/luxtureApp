@@ -32,10 +32,14 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.layoutId
 import androidx.navigation.NavHostController
 import androidx.palette.graphics.Palette
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 
 @Composable
 fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
-    val furnitureModel = viewModel.data ?: return // Avoid null crash
+    val furnitureModel by viewModel.selectedItem.collectAsState()
+    if (furnitureModel == null) return
+
     val context = LocalContext.current
     var btnColor by remember { mutableStateOf(colorPurple) }
 
@@ -47,14 +51,14 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
         constraintSet = constraintsDetail()
     ) {
         Text(
-            text = furnitureModel.type.orEmpty(),
+            text = furnitureModel!!.type.orEmpty(),
             style = Typography.body1,
             fontSize = 18.sp,
             color = Color(0xFF171717).copy(alpha = 0.4f),
             modifier = Modifier.layoutId("tvType")
         )
         Text(
-            text = furnitureModel.name.orEmpty(),
+            text = furnitureModel!!.name.orEmpty(),
             style = Typography.h1,
             fontSize = 32.sp,
             color = colorBlack,
@@ -68,14 +72,14 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
             modifier = Modifier.layoutId("tvFrom")
         )
         Text(
-            text = "$ ${furnitureModel.price}",
+            text = "$ ${furnitureModel!!.price}",
             style = Typography.h1,
             fontSize = 24.sp,
             color = colorBlack,
             modifier = Modifier.layoutId("tvPrice")
         )
         Image(
-            painter = painterResource(id = furnitureModel.drawable),
+            painter = painterResource(id = furnitureModel!!.drawable),
             contentDescription = "Furniture Image",
             modifier = Modifier
                 .height(240.dp)
@@ -90,14 +94,14 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
                 .padding(24.dp, 160.dp, 24.dp, 24.dp)
         ) {
             Text(
-                text = furnitureModel.name.orEmpty(),
+                text = furnitureModel!!.name.orEmpty(),
                 style = Typography.h1,
                 fontSize = 18.sp,
                 color = Color(0xFF171717)
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = furnitureModel.description.orEmpty(),
+                text = furnitureModel!!.description.orEmpty(),
                 style = Typography.body2,
                 fontSize = 16.sp,
                 color = Color(0xFF171717).copy(alpha = 0.6f)
@@ -105,7 +109,7 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
             Spacer(modifier = Modifier.height(64.dp))
 
             val bitmap = runCatching {
-                BitmapFactory.decodeResource(context.resources, furnitureModel.drawable)
+                BitmapFactory.decodeResource(context.resources, furnitureModel!!.drawable)
             }.getOrNull()
 
             bitmap?.let {
@@ -121,9 +125,9 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
             Button(
                 onClick = {
                     val intentUri = Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
-                        .appendQueryParameter("file", furnitureModel.link)
+                        .appendQueryParameter("file", furnitureModel!!.link)
                         .appendQueryParameter("mode", "ar_only")
-                        .appendQueryParameter("title", furnitureModel.name)
+                        .appendQueryParameter("title", furnitureModel!!.name)
                         .build()
 
                     val sceneViewerIntent = Intent(Intent.ACTION_VIEW).apply {
@@ -147,7 +151,7 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
 
             Button(
                 onClick = {
-                    viewModel.setSelectedItem(furnitureModel) // ✅ Updated here
+                    viewModel.setSelectedItem(furnitureModel!!)
                     navController.currentBackStackEntry?.savedStateHandle?.set("checkoutItem", furnitureModel)
                     navController.navigate("checkout")
                 },

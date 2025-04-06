@@ -1,32 +1,31 @@
 package `in`.kay.furture
 
+import androidx.compose.runtime.mutableStateOf
 import `in`.kay.furture.models.FurnitureModel
 import `in`.kay.furture.screens.AddressData
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import androidx.compose.runtime.State
 
 @HiltViewModel
 class SharedViewModel @Inject constructor() : ViewModel() {
 
-    // Observable FurnitureModel data for Compose
-    var data by mutableStateOf<FurnitureModel?>(null)
-        private set
+    // Observable selected item
+    private val _selectedItem = MutableStateFlow<FurnitureModel?>(null)
+    val selectedItem: StateFlow<FurnitureModel?> = _selectedItem
 
     fun setSelectedItem(item: FurnitureModel) {
-        data = item
+        _selectedItem.value = item
     }
 
     fun clearSelectedItem() {
-        data = null
+        _selectedItem.value = null
     }
 
-    // Store the selected category name
+    // Selected category
     private val _selectedCategory = MutableStateFlow<String?>(null)
     val selectedCategory: StateFlow<String?> = _selectedCategory
 
@@ -38,7 +37,7 @@ class SharedViewModel @Inject constructor() : ViewModel() {
         _selectedCategory.value = null
     }
 
-    // Address Data via StateFlow
+    // Address
     private val _address = MutableStateFlow<AddressData?>(null)
     val address: StateFlow<AddressData?> = _address
 
@@ -49,4 +48,23 @@ class SharedViewModel @Inject constructor() : ViewModel() {
     fun clearAddress() {
         _address.value = null
     }
+
+    private val _paymentId = MutableStateFlow<String?>(null)
+    val paymentId: StateFlow<String?> = _paymentId
+
+    fun setPaymentId(id: String) {
+        _paymentId.value = id
+    }
+
+    fun clearPaymentId() {
+        _paymentId.value = null
+    }
+
+    private val _paymentMethod = mutableStateOf("")
+    val paymentMethod: State<String> = _paymentMethod
+
+    fun setPaymentMethod(method: String) {
+        _paymentMethod.value = method
+    }
+
 }
