@@ -58,62 +58,78 @@ fun PaymentScreen(navController: NavController, viewModel: SharedViewModel) {
 
                 var selectedMethod by remember { mutableStateOf("UPI") }
 
+                // Set initial value to SharedViewModel
+                LaunchedEffect(selectedMethod) {
+                    viewModel.setPaymentMethod(selectedMethod)
+                }
+
                 PaymentOption(
                     title = "NET Banking",
                     selected = selectedMethod == "NET Banking",
-                    onSelected = { selectedMethod = "NET Banking" }
+                    onSelected = {
+                        selectedMethod = "NET Banking"
+                        viewModel.setPaymentMethod("NET Banking")
+                    }
                 )
                 PaymentOption(
                     title = "Credit / Debit Card",
                     selected = selectedMethod == "Card",
-                    onSelected = { selectedMethod = "Card" }
+                    onSelected = {
+                        selectedMethod = "Card"
+                        viewModel.setPaymentMethod("Card")
+                    }
                 )
                 PaymentOption(
                     title = "Cash on Delivery",
                     selected = selectedMethod == "COD",
-                    onSelected = { selectedMethod = "COD" }
+                    onSelected = {
+                        selectedMethod = "COD"
+                        viewModel.setPaymentMethod("COD")
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = {
-                        if (selectedMethod == "Card" || selectedMethod == "NET Banking") {
-                            val paymentHandler = PaymentHandler(
-                                activity = activity,
-                                onSuccess = { paymentId ->
-                                    viewModel.setPaymentMethod(selectedMethod)
-                                    viewModel.setPaymentId(paymentId)
-                                    navController.navigate("order") {
-                                        popUpTo("checkout") { inclusive = true }
-                                        launchSingleTop = true
+                        when (selectedMethod) {
+                            "Card", "NET Banking" -> {
+                                val paymentHandler = PaymentHandler(
+                                    activity = activity,
+                                    onSuccess = { paymentId ->
+                                        viewModel.setPaymentId(paymentId)
+                                        navController.navigate("order") {
+                                            popUpTo("checkout") { inclusive = true }
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    onFailure = { errorMessage ->
+                                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
                                     }
-                                },
-                                onFailure = { errorMessage ->
-                                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                                }
-                            )
+                                )
+                                paymentHandler.startPayment(
+                                    itemName = selectedItem!!.name ?: "Furniture Item",
+                                    amountInRupees = selectedItem!!.price ?: 0,
+                                    userName = address!!.fullName,
+                                    userEmail = address!!.email,
+                                    userPhone = address!!.phone
+                                )
+                            }
 
-                            paymentHandler.startPayment(
-                                itemName = selectedItem!!.name ?: "Furniture Item",
-                                amountInRupees = selectedItem!!.price ?: 0,
-                                userName = address!!.fullName,
-                                userEmail = address!!.email,
-                                userPhone = address!!.phone
-                            )
-                        } else {
-                            viewModel.setPaymentMethod(selectedMethod)
-                            viewModel.setPaymentId("COD_REF_${System.currentTimeMillis()}")
-                            navController.navigate("order") {
-                                popUpTo("checkout") { inclusive = true }
-                                launchSingleTop = true
+                            "COD" -> {
+                                viewModel.setPaymentId("COD_REF_${System.currentTimeMillis()}")
+                                navController.navigate("order") {
+                                    popUpTo("checkout") { inclusive = true }
+                                    launchSingleTop = true
+                                }
                             }
                         }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colorPurple)
+                    colors = ButtonDefaults.buttonColors(backgroundColor = if (selectedMethod.isNullOrBlank()) Color.Gray else colorPurple),
+                    enabled = !selectedMethod.isNullOrBlank()
                 ) {
                     Text("Pay Now", fontSize = 18.sp, color = Color.White)
                 }

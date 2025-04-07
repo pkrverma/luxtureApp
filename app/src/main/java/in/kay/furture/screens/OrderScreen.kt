@@ -38,6 +38,7 @@ fun OrderScreen(
     val address by viewModel.address.collectAsStateWithLifecycle()
     val paymentId by viewModel.paymentId.collectAsStateWithLifecycle()
     val paymentStatus = "Success"
+    val paymentMethod by viewModel.paymentMethod.collectAsState()
 
     val now = remember { LocalDateTime.now() }
     val orderFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a")
@@ -106,7 +107,7 @@ fun OrderScreen(
                                 )
                                 Column {
                                     Text("Name: ${item!!.name}", style = Typography.body1)
-                                    Text("Category: ${item!!.type}", style = Typography.body2)
+                                    Text("Category: ${item!!.type}", style = Typography.body1)
                                     Text("Price: ₹${item!!.price}", style = Typography.body1)
                                 }
                             }
@@ -126,12 +127,15 @@ fun OrderScreen(
 
                             Text("Order Detail", style = Typography.body1, color = colorPurple)
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text("Payment ID: ${paymentId ?: "Not Available"}")
-                            Text("Payment Method: UPI / Card")
-                            Text("Status: $paymentStatus")
                             Text("Order Date: $orderTime")
+                            Text("Delivery Charge: ₹50")
+                            Text("Total Amount Paid: ₹${(item!!.price ?: 0) + 50}")
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text("Payment Method: ${paymentMethod ?: "Not Selected"}")
+                            Text("Payment ID: ${paymentId ?: "Not Available"}")
+                            Text("Status: $paymentStatus")
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text("Expected Delivery: $expectedDelivery")
-                            Text("Total Paid: ₹${(item!!.price ?: 0) + 50}")
                         }
                     }
 

@@ -22,12 +22,12 @@ class PaymentHandler(
 
         try {
             val options = JSONObject().apply {
-                put("name", "Luxurious Creation")
+                put("name", "Luxture")
                 put("description", itemName)
                 put("currency", "INR")
                 put("amount", amountInRupees * 100)
 
-                put("image", "https://your-image-link.com/logo.png")
+                put("image", "https://drive.google.com/file/d/1vXMLwv-fubJmtlyg6Co34OnSVY0AbNpv/view?usp=drive_link")
 
                 val prefill = JSONObject().apply {
                     put("name", userName)

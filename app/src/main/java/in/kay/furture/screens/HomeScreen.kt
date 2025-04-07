@@ -54,7 +54,7 @@ fun HomeScreen(navController: NavHostController, viewModel: SharedViewModel) {
                 modifier = Modifier.size(32.dp)
             )
             Text(
-                text = "Fur",
+                text = "Lux",
                 modifier = Modifier.padding(start = 8.dp),
                 style = `in`.kay.furture.ui.theme.Typography.h1,
             )

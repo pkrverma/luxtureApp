@@ -76,7 +76,7 @@ fun SplashScreen(navController: NavHostController) {
         ) {
             Row(modifier = Modifier.padding(start = 4.dp)) {
                 Text(
-                    text = "Fur",
+                    text = "Lux",
                     color = colorWhite,
                     modifier = Modifier.padding(start = 0.dp),
                     style = `in`.kay.furture.ui.theme.Typography.h1

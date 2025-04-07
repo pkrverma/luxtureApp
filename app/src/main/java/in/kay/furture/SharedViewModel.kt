@@ -60,11 +60,12 @@ class SharedViewModel @Inject constructor() : ViewModel() {
         _paymentId.value = null
     }
 
-    private val _paymentMethod = mutableStateOf("")
-    val paymentMethod: State<String> = _paymentMethod
+    private val _paymentMethod = MutableStateFlow<String?>(null)
+    val paymentMethod: StateFlow<String?> = _paymentMethod
 
     fun setPaymentMethod(method: String) {
         _paymentMethod.value = method
     }
+
 
 }
