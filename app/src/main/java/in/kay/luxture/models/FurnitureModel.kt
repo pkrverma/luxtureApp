@@ -12,3 +12,5 @@ data class FurnitureModel(
     val description: String = "",
     val type: String = ""
 ) : Parcelable
+
+

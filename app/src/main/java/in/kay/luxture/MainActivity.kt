@@ -1,8 +1,6 @@
 package `in`.kay.luxture
 
 import android.app.Activity
-import `in`.kay.luxture.screens.*
-import `in`.kay.luxture.ui.theme.FurtureTheme
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -23,6 +21,8 @@ import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.kay.luxture.screens.*
+import `in`.kay.luxture.ui.theme.FurtureTheme
 import `in`.kay.luxture.ui.theme.LoginScreen
 
 @AndroidEntryPoint
@@ -43,8 +43,6 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
                     onSuccess = {
                         Toast.makeText(this@MainActivity, "Google Sign-In Success", Toast.LENGTH_SHORT).show()
                         Log.d("Auth", "Firebase User: ${FirebaseAuth.getInstance().currentUser?.email}")
-                        // Optionally navigate to next screen:
-                        // startActivity(Intent(this@MainActivity, HomeActivity::class.java))
                     },
                     onFailure = { error ->
                         Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
@@ -56,8 +54,6 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
                 Log.w("Auth", "Google Sign-In canceled or null data")
             }
         }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +82,7 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
                         }
                         composable("register") {
                             RegisterScreen(
-                                onRegisterClick = {name, phone, pass, confirm, email ->
+                                onRegisterClick = { name, phone, pass, confirm, email ->
                                     FirebaseAuthHelper.signUpWithEmailAndSaveProfile(
                                         context = this@MainActivity,
                                         email = email,
@@ -129,6 +125,14 @@ class MainActivity : ComponentActivity(), PaymentResultWithDataListener {
                         }
                         composable("order") {
                             OrderScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable("chairs") {
+                            ChairsScreen(
+                                onViewDetailClick = { model ->
+                                    viewModel.updateSelectedModel(model)
+                                    navController.navigate("detail")
+                                }
+                            )
                         }
                     }
                 }

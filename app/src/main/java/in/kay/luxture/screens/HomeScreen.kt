@@ -88,12 +88,12 @@ fun HomeScreen(navController: NavHostController, viewModel: SharedViewModel) {
                     onClick = {
                         // Navigate based on category name
                         when (category.name?.lowercase()) {
-                            "beds" -> navController.navigate("bedsCategory")
+                            "beds" -> navController.navigate("beds")
                             "chairs" -> navController.navigate("chairsCategory")
-                            "sofas" -> navController.navigate("sofasCategory")
-                            "home decor" -> navController.navigate("homeDecorCategory")
-                            "office" -> navController.navigate("officeCategory")
-                            "tables" -> navController.navigate("tablesCategory")
+                            "sofas" -> navController.navigate("sofas")
+                            "home decor" -> navController.navigate("homeDecor")
+                            "office" -> navController.navigate("office")
+                            "tables" -> navController.navigate("tables")
                             else -> {
                                 Toast.makeText(context, "This feature is coming soon!", Toast.LENGTH_SHORT).show()
                             }

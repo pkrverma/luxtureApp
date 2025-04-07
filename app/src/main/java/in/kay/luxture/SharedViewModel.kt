@@ -1,5 +1,6 @@
 package `in`.kay.luxture
 
+import androidx.compose.runtime.mutableStateOf
 import `in`.kay.luxture.models.FurnitureModel
 import `in`.kay.luxture.screens.AddressData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class SharedViewModel @Inject constructor() : ViewModel() {
@@ -77,4 +80,11 @@ class SharedViewModel @Inject constructor() : ViewModel() {
         _addresses.value = current
     }
 
+    // Changed setter name to avoid JVM signature clash
+    var selectedModel by mutableStateOf<FurnitureModel?>(null)
+        private set
+
+    fun updateSelectedModel(model: FurnitureModel) {
+        selectedModel = model
+    }
 }
