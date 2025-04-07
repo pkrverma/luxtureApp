@@ -36,20 +36,12 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1058953721454:android:406d251ad7396afb0e987f",
+        "mobilesdk_app_id": "1:1058953721454:android:1fb9c722f6c937390e987f",
         "android_client_info": {
-          "package_name": "com.pulkit.platform.furnitureecommerceappui"
+          "package_name": "in.kay.luxture"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "1058953721454-kr7g4t7o07o9g6mme06kojahqm7gj0qv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pulkit.platform.furnitureecommerceappui",
-            "certificate_hash": "58124e6def1cd87f049ab20abea49b69ceef1dbd"
-          }
-        },
         {
           "client_id": "1058953721454-c6kri8ou25abrcnbokj70515qqi6mvec.apps.googleusercontent.com",
           "client_type": 3

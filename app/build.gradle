@@ -4,15 +4,16 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace 'in.kay.furture'
+    namespace 'in.kay.luxture'
     compileSdk = 34
 
     defaultConfig {
-        applicationId "in.kay.furture"
-        minSdk = 21
+        applicationId "in.kay.luxture"
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -45,11 +46,11 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.ext.compiler_version
+        kotlinCompilerExtensionVersion = "1.5.4" // or latest stable
     }
 
     packagingOptions {
@@ -65,43 +66,54 @@ kotlin {
 
 dependencies {
     // Core
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0"
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:25.1.3'
 
     // Compose
+    def compose_version = "1.5.4"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.constraintlayout:constraintlayout-compose:$constraint_layout"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version" // ✅ ADDED
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.activity:activity-compose:1.5.1"
+    implementation "androidx.activity:activity-compose:1.8.0"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
+    // ConstraintLayout for Compose
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
     // Hilt
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    kapt "com.google.dagger:hilt-compiler:$dagger_version"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    def hilt_version = "2.48"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.1.0-alpha01"
 
     // Retrofit + OkHttp
+    def retrofitVersion = "2.9.0"
+    def okHttpVersion = "4.11.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
     // Accompanist
+    def accompanist_version = "0.31.5-beta"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
     implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
 
     // Coil
+    def coil_version = "2.4.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    // Desugaring for Java 11+
+    // Desugaring
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     // Navigation Compose
+    def nav_version = "2.7.4"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
     // Telegram Bot SDK (Optional)
@@ -110,17 +122,18 @@ dependencies {
     // Razorpay
     implementation 'com.razorpay:checkout:1.6.40'
 
-    // Replace deprecated palette library
+    // Palette
     implementation "androidx.palette:palette-ktx:1.0.0"
 
-    // Coil again (already included)
-    implementation "io.coil-kt:coil-compose:2.4.0"
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    // Google Sign-In
+    implementation 'com.google.android.gms:play-services-auth:21.0.0'
 
     // Tests
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

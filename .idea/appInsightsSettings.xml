@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="in.kay.luxture" />
+                  <option name="mobileSdkAppId" value="1:1058953721454:android:1fb9c722f6c937390e987f" />
+                  <option name="projectId" value="luxurious-creation" />
+                  <option name="projectNumber" value="1058953721454" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
