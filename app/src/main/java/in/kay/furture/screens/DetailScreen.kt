@@ -72,7 +72,7 @@ fun DetailScreen(viewModel: SharedViewModel, navController: NavHostController) {
             modifier = Modifier.layoutId("tvFrom")
         )
         Text(
-            text = "$ ${furnitureModel!!.price}",
+            text = "₹ ${furnitureModel!!.price}",
             style = Typography.h1,
             fontSize = 24.sp,
             color = colorBlack,

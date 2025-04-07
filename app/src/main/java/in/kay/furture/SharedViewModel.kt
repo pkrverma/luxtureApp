@@ -67,5 +67,16 @@ class SharedViewModel @Inject constructor() : ViewModel() {
         _paymentMethod.value = method
     }
 
+    private val _addresses = MutableStateFlow<List<AddressData>>(emptyList())
+    val addresses: StateFlow<List<AddressData>> = _addresses
+
+    fun addAddress(newAddress: AddressData) {
+        val current = _addresses.value.toMutableList()
+
+        current.add(0, newAddress)
+        if (current.size > 2) current.removeLast()
+
+        _addresses.value = current
+    }
 
 }

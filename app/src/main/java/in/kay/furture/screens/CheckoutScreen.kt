@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import `in`.kay.furture.PaymentHandler
 import `in`.kay.furture.SharedViewModel
 import `in`.kay.furture.ui.theme.Typography
 import `in`.kay.furture.ui.theme.colorBlack
@@ -34,6 +35,7 @@ fun CheckoutScreen(
     val activity = context as Activity
     val addressState by viewModel.address.collectAsState()
     val item by viewModel.selectedItem.collectAsState()
+
 
     if (item == null) {
         Box(
@@ -61,7 +63,7 @@ fun CheckoutScreen(
                     .background(Color(0xFFF3F6F8))
                     .padding(16.dp)
             ) {
-                // Product Information
+                // Image and item details
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -82,13 +84,18 @@ fun CheckoutScreen(
                     Column {
                         Text(item!!.name ?: "Unknown Product", style = Typography.h1, fontSize = 20.sp)
                         Text(item!!.type ?: "Unknown Type", style = Typography.body2, color = Color.Gray)
-                        Text("₹${item!!.price ?: 0}", style = Typography.h1, fontSize = 20.sp, color = colorPurple)
+                        Text(
+                            "₹${item!!.price ?: 0}",
+                            style = Typography.h1,
+                            fontSize = 20.sp,
+                            color = colorPurple
+                        )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Order Summary Section
+                // Order Summary
                 Text("Order Summary", style = Typography.h1, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -111,33 +118,27 @@ fun CheckoutScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Address Section
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(colorWhite)
-                        .padding(16.dp)
-                ) {
-                    Text("Deliver To:", style = Typography.h1, fontSize = 16.sp, color = colorPurple)
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    if (addressState != null) {
-                        val address = addressState!!
+                // Address section
+                addressState?.let { address ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(colorWhite)
+                            .padding(16.dp)
+                    ) {
+                        Text("Deliver To:", style = Typography.h1, fontSize = 16.sp, color = colorPurple)
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text("${address.fullName}, ${address.phone}")
                         Text("${address.address}, ${address.city}, ${address.state} - ${address.zip}")
                         if (address.landmark.isNotBlank()) {
                             Text("Landmark: ${address.landmark}")
                         }
-                    } else {
-                        Text("Pulkit Verma, 6207212232")
-                        Text("UEM, Jaipur, Jaipur, Rajasthan - 303807")
-                        Text("Landmark: Udaipuriya Mod")
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
+                // Add / Edit Address Button
                 Button(
                     onClick = { navController.navigate("address") },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
@@ -150,12 +151,10 @@ fun CheckoutScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Confirm and Pay Button
                 Button(
                     onClick = {
-                        if (addressState?.fullName.isNullOrBlank() ||
-                            addressState?.phone.isNullOrBlank() ||
-                            addressState?.address.isNullOrBlank()
-                        ) {
+                        if (addressState == null) {
                             Toast.makeText(context, "Please add your delivery address first.", Toast.LENGTH_SHORT).show()
                             navController.navigate("address")
                         } else {
