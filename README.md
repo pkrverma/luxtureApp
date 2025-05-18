@@ -36,17 +36,18 @@ You can try out the Luxture App on your Android device:
 
 ## 📸 Screenshots & Demo Video
 
-[Demo Video](media/LuxtureApp.mp4)
-[Login Page](media/loginPage.jpg)
-[Reset Password](media/resetPassword.jpg)
-[Registration](media/accountCreation.jpg)
-[Home Page](media/homPage.jpg)
-[Product Detail](media/productDetail.jpg)
-[Add Address](media/addAddress.jpg)
-[Checkout Page](media/checkoutPage.jpg)
-[Payment Page](media/paymentMethod.jpg)
-[RazorPay Payment](media/razorpayPayment.jpg)
-[Order Summary](media/orderSummary.jpg)
+![Demo Video](media/LuxtureApp.mp4)
+
+![Login Page](media/loginPage.jpg)
+![Reset Password](media/resetPassword.jpg)
+![Registration](media/accountCreation.jpg)
+![Home Page](media/homPage.jpg)
+![Product Detail](media/productDetail.jpg)
+![Add Address](media/addAddress.jpg)
+![Checkout Page](media/checkoutPage.jpg)
+![Payment Page](media/paymentMethod.jpg)
+![RazorPay Payment](media/razorpayPayment.jpg)
+![Order Summary](media/orderSummary.jpg)
 
 ---
 
