@@ -36,7 +36,7 @@ You can try out the Luxture App on your Android device:
 
 ## 📸 Screenshots & Demo Video
 
-![media/LuxtureApp.mp4](https://drive.google.com/file/d/1FlpZ0TaSplKGknjC1Bs8HJGs1g-cZBpu/view?usp=sharing)
+[Demo Video](https://drive.google.com/file/d/1FlpZ0TaSplKGknjC1Bs8HJGs1g-cZBpu/view?usp=drive_link)
 
 ![Login Page](media/loginPage.jpg)
 ![Reset Password](media/resetPassword.jpg)
