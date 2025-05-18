@@ -34,6 +34,22 @@ You can try out the Luxture App on your Android device:
 
 ---
 
+## 📸 Screenshots & Demo Video
+
+[Demo Video](media/LuxtureApp.mp4)
+[Login Page](media/loginPage.jpg)
+[Reset Password](media/resetPassword.jpg)
+[Registration](media/accountCreation.jpg)
+[Home Page](media/homPage.jpg)
+[Product Detail](media/productDetail.jpg)
+[Add Address](media/addAddress.jpg)
+[Checkout Page](media/checkoutPage.jpg)
+[Payment Page](media/paymentMethod.jpg)
+[RazorPay Payment](media/razorpayPayment.jpg)
+[Order Summary](media/orderSummary.jpg)
+
+---
+
 ## 🛠️ Technology Used
 
 * **Programming Language**: Kotlin
@@ -118,12 +134,6 @@ You can try out the Luxture App on your Android device:
 ## 👨‍💻 Developer Note
 
 > Luxture was designed with a strong focus on solving a real problem in online shopping. This app empowers users to **make informed buying decisions** and **helps sellers reduce losses due to unnecessary returns**.
-
----
-
-## 📸 Screenshots (Add Screenshots Here)
-
-*Add relevant screenshots or screen recordings showing AR model placement, login flow, and payment confirmation.*
 
 ---
 
