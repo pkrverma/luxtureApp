@@ -141,7 +141,3 @@ You can try out the Luxture App on your Android device:
 ## 🔐 License
 
 This project is licensed under the MIT License - feel free to use and contribute.
-
----
-
-Let me know if you need this in a downloadable Markdown format or want help uploading it to GitHub.
