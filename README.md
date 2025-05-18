@@ -1,7 +1,3 @@
-Sure! Here's a detailed and well-structured `README.md` file for the **Luxture App**, written in clear language and formatted for GitHub:
-
----
-
 # 🛋️ Luxture App - AR-Based Furniture Shopping Experience
 
 Luxture is an Augmented Reality (AR)-powered mobile application that transforms how users shop for furniture online. Built using **Kotlin** and **Jetpack Compose**, it provides a real-time, immersive shopping experience by allowing users to visualize 3D models of furniture in their own space before purchasing.
@@ -25,6 +21,16 @@ These returns cause **financial losses to sellers** and **frustration for custom
 **Luxture App** addresses this issue by allowing users to **view 3D models of furniture in their real environment using AR**. This helps ensure the selected product fits well in their space, matches their interior design, and meets their expectations.
 
 By providing a “try-before-you-buy” experience, we significantly reduce product returns and enhance customer satisfaction.
+
+---
+
+## 📲 Download App for Trial
+
+You can try out the Luxture App on your Android device:
+
+[![Download Luxture App](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)]([https://your-apk-link.com](https://drive.google.com/file/d/19mz-2esDxeLdohK71z_214Z_PCyb-pRC/view?usp=sharing))
+
+> ⚠️ Make sure your device supports ARCore for the best experience.
 
 ---
 
