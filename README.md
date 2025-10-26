@@ -38,16 +38,25 @@ You can try out the Luxture App on your Android device:
 
 [Demo Video](https://drive.google.com/file/d/1FlpZ0TaSplKGknjC1Bs8HJGs1g-cZBpu/view?usp=drive_link)
 
-<img src="media/loginPage.jpg" alt="Login Page" height="400"/>
-<img src="media/resetPassword.jpg" alt="Reset Password" height="400"/>
-<img src="media/accountCreation.jpg" alt="Registration" height="400"/>
-<img src="media/homPage.jpg" alt="Home Page" height="400"/>
-<img src="media/productDetail.jpg" alt="Product Detail" height="400"/>
-<img src="media/addAddress.jpg" alt="Add Address" height="400"/>
-<img src="media/checkoutPage.jpg" alt="Checkout Page" height="400"/>
-<img src="media/paymentMethod.jpg" alt="Payment Page" height="400"/>
-<img src="media/razorpayPayment.jpg" alt="RazorPay Payment" height="400"/>
-<img src="media/orderSummary.jpg" alt="Order Summary" height="400"/>
+| Login Page | Reset Password |
+| :---: | :---: |
+| <img src="media/loginPage.jpg" alt="Login Page" height="400"/> | <img src="media/resetPassword.jpg" alt="Reset Password" height="400"/> |
+
+| Registration | Home Page |
+| :---: | :---: |
+| <img src="media/accountCreation.jpg" alt="Registration" height="400"/> | <img src="media/homPage.jpg" alt="Home Page" height="400"/> |
+
+| Product Detail | Add Address |
+| :---: | :---: |
+| <img src="media/productDetail.jpg" alt="Product Detail" height="400"/> | <img src="media/addAddress.jpg" alt="Add Address" height="400"/> |
+
+| Checkout Page | Payment Page |
+| :---: | :---: |
+| <img src="media/checkoutPage.jpg" alt="Checkout Page" height="400"/> | <img src="media/paymentMethod.jpg" alt="Payment Page" height="400"/> |
+
+| RazorPay Payment | Order Summary |
+| :---: | :---: |
+| <img src="media/razorpayPayment.jpg" alt="RazorPay Payment" height="400"/> | <img src="media/orderSummary.jpg" alt="Order Summary" height="400"/> |
 
 ---
 

@@ -20,7 +20,7 @@
       ],
       "api_key": [
         {
-          "current_key": "${API_KEY_PLACEHOLDER}" [<- snippet (app/google-services.json:23-23)]
+          "current_key": "${API_KEY_PLACEHOLDER}"
         }
       ],
       "services": {
