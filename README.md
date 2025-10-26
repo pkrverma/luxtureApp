@@ -28,7 +28,7 @@ By providing a “try-before-you-buy” experience, we significantly reduce prod
 
 You can try out the Luxture App on your Android device:
 
-[![Download Luxture App](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)]([https://your-apk-link.com](https://drive.google.com/file/d/19mz-2esDxeLdohK71z_214Z_PCyb-pRC/view?usp=sharing))
+[![Download Luxture App](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)]([https://drive.google.com/file/d/1X-AwzfDRDAUD2hVpe_5Tl7QqvsMHTz1S/view?usp=drive_link](https://drive.google.com/file/d/1X-AwzfDRDAUD2hVpe_5Tl7QqvsMHTz1S/view?usp=drive_link))
 
 > ⚠️ Make sure your device supports ARCore for the best experience.
 
