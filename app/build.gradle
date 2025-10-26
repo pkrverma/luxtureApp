@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -7,18 +9,25 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def localProperties = new Properties()
+if (rootProject.file("local.properties").exists()) {
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+}
+
 android {
     namespace 'in.kay.luxture'
-    compileSdk = 34
+    compileSdk 34
 
     defaultConfig {
         applicationId "in.kay.luxture"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        resValue "string", "google_api_key", localProperties.getProperty("API_KEY", "")
 
         vectorDrawables {
             useSupportLibrary = true
@@ -136,4 +145,20 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+// After evaluating the project, replace the placeholder in google-services.json
+afterEvaluate {
+    // Task to replace the placeholder in google-services.json
+    tasks.named("processDebugGoogleServices") {
+        doFirst {
+            def googleServicesFile = file("src/main/google-services.json")
+            if (googleServicesFile.exists()) {
+                String content = googleServicesFile.getText('UTF-8')
+                String apiKey = localProperties.getProperty('API_KEY', '')
+                content = content.replace('${API_KEY_PLACEHOLDER}', apiKey)
+                googleServicesFile.write(content, 'UTF-8')
+            }
+        }
+    }
 }

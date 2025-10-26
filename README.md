@@ -28,7 +28,7 @@ By providing a “try-before-you-buy” experience, we significantly reduce prod
 
 You can try out the Luxture App on your Android device:
 
-[![Download Luxture App](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)]([https://drive.google.com/file/d/1X-AwzfDRDAUD2hVpe_5Tl7QqvsMHTz1S/view?usp=drive_link](https://drive.google.com/file/d/1X-AwzfDRDAUD2hVpe_5Tl7QqvsMHTz1S/view?usp=drive_link))
+[![Download Luxture App](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://drive.google.com/file/d/1X-AwzfDRDAUD2hVpe_5Tl7QqvsMHTz1S/view?usp=sharing)
 
 > ⚠️ Make sure your device supports ARCore for the best experience.
 
@@ -38,16 +38,16 @@ You can try out the Luxture App on your Android device:
 
 [Demo Video](https://drive.google.com/file/d/1FlpZ0TaSplKGknjC1Bs8HJGs1g-cZBpu/view?usp=drive_link)
 
-![Login Page](media/loginPage.jpg)
-![Reset Password](media/resetPassword.jpg)
-![Registration](media/accountCreation.jpg)
-![Home Page](media/homPage.jpg)
-![Product Detail](media/productDetail.jpg)
-![Add Address](media/addAddress.jpg)
-![Checkout Page](media/checkoutPage.jpg)
-![Payment Page](media/paymentMethod.jpg)
-![RazorPay Payment](media/razorpayPayment.jpg)
-![Order Summary](media/orderSummary.jpg)
+<img src="media/loginPage.jpg" alt="Login Page" height="400"/>
+<img src="media/resetPassword.jpg" alt="Reset Password" height="400"/>
+<img src="media/accountCreation.jpg" alt="Registration" height="400"/>
+<img src="media/homPage.jpg" alt="Home Page" height="400"/>
+<img src="media/productDetail.jpg" alt="Product Detail" height="400"/>
+<img src="media/addAddress.jpg" alt="Add Address" height="400"/>
+<img src="media/checkoutPage.jpg" alt="Checkout Page" height="400"/>
+<img src="media/paymentMethod.jpg" alt="Payment Page" height="400"/>
+<img src="media/razorpayPayment.jpg" alt="RazorPay Payment" height="400"/>
+<img src="media/orderSummary.jpg" alt="Order Summary" height="400"/>
 
 ---
 
