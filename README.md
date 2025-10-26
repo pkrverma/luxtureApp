@@ -36,7 +36,7 @@ You can try out the Luxture App on your Android device:
 
 ## 📸 Screenshots & Demo Video
 
-[Demo Video](https://drive.google.com/file/d/1FlpZ0TaSplKGknjC1Bs8HJGs1g-cZBpu/view?usp=drive_link)
+https://github.com/user-attachments/assets/a43d0644-b543-43cf-aa81-ae4b385c197d
 
 | Login Page | Reset Password |
 | :---: | :---: |
